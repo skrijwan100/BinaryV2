@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import UploadDocs from "../components/apiKey/UploadDocs.jsx";
 import ApiKeyCard from "../components/apiKey/ApiKeyCard.jsx";
+import UploadUrl from "../components/apiKey/UploadUrl.jsx";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import axios from "axios";
@@ -16,26 +17,33 @@ const ApiPage = () => {
           console.warn("No token found, using demo API key");
           return;
         }
-        const response = await axios.get(`${import.meta.env.VITE_JAVA_URL}/auth/api-key`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await axios.get(
+          `${import.meta.env.VITE_JAVA_URL}/auth/api-key`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
           },
-        });
+        );
         setApiKey(response.data.apiKey);
-
-      }catch (error) {
+      } catch (error) {
         console.error("Failed to fetch API key:", error);
       }
-    }
+    };
     fetchApiKey();
-  }, [])
-  
+  }, []);
 
   const [documents, setDocuments] = useState([]);
   const navigate = useNavigate();
 
-  const handleUploadSuccess = (file) => {
-    setDocuments((prev) => [...prev, { name: file.name, status: "ready" }]);
+  const handleUploadSuccess = (item) => {
+    setDocuments((prev) => [
+      ...prev,
+      {
+        name: item.name,
+        status: "ready",
+      },
+    ]);
   };
 
   return (
@@ -51,6 +59,7 @@ const ApiPage = () => {
 
         {/* Upload */}
         <UploadDocs apiKey={apiKey} onUploadSuccess={handleUploadSuccess} />
+        <UploadUrl apiKey={apiKey} onUploadSuccess={handleUploadSuccess} />
 
         {/* API Key */}
         <ApiKeyCard apiKey={apiKey} />
