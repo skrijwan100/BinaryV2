@@ -78,8 +78,8 @@ const App = () => {
       try {
         await Promise.all([
           axios.get(`${import.meta.env.VITE_SOCKET_SERVER_URL}`),
-          axios.get(`${import.meta.env.VITE_JAVA_URL}/api/v2`),
           axios.get(`${import.meta.env.VITE_PYTHON_SERVER_URL}`),
+          axios.get(`${import.meta.env.VITE_JAVA_URL}/api/v2/`),
         ]);
       } catch (error) {
         console.error("Render wake-up failed:", error);
